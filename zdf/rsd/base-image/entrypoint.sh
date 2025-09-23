@@ -1,0 +1,1 @@
+Content of rsd/base-image/entrypoint.sh
