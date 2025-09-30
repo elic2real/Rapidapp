@@ -1,0 +1,21 @@
+[
+  {
+    "timestamp": "2025-09-22T19:58:26.970074",
+    "error_type": "ModuleNotFoundError",
+    "error_message": "No module named 'aiofiles'",
+    "file_path": "ai_debug_system.py",
+    "line_number": 18,
+    "context": {
+      "description": "Missing optional dependency causing import failures",
+      "impact": "Async file operations disabled",
+      "demo_affected": [
+        "ai_magic_show.py",
+        "test_live_debugging.py"
+      ]
+    },
+    "stack_trace": "",
+    "demo_session": true,
+    "auto_captured": true,
+    "severity": "HIGH"
+  }
+]

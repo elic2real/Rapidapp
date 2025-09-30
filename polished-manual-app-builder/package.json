@@ -1,0 +1,48 @@
+{
+  "name": "polished-manual-app-builder",
+  "version": "1.0.0",
+  "description": "Production-ready AI-assisted app builder with event sourcing and real-time collaboration",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "quality": "pnpm run lint && pnpm run typecheck && pnpm run test",
+    "cli": "tsx packages/templates/src/cli.ts"
+  },
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@turbo/gen": "^1.10.12",
+    "@types/node": "^20.8.0",
+    "eslint": "^8.50.0",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "^3.0.3",
+    "tsx": "^3.14.0",
+    "turbo": "^1.10.12",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.6.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.39.4",
+    "@opentelemetry/exporter-jaeger": "^1.17.0",
+    "@opentelemetry/exporter-prometheus": "^0.43.0",
+    "@opentelemetry/sdk-node": "^0.43.0",
+    "pino": "^8.15.0",
+    "zod": "^3.22.4"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "collab-engine",
+  "version": "1.0.0",
+  "description": "Real-time collaboration engine with Yjs CRDT and event store persistence",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "yjs": "^13.6.8",
+    "y-websocket": "^1.5.0",
+    "y-protocols": "^1.0.6",
+    "lib0": "^0.2.85",
+    "redis": "^4.6.8",
+    "pino": "^8.15.0",
+    "uuid": "^9.0.1",
+    "dotenv": "^16.3.1",
+    "@opentelemetry/api": "^1.6.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.39.4",
+    "@opentelemetry/exporter-jaeger": "^1.17.0",
+    "@opentelemetry/sdk-node": "^0.43.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.8.0",
+    "@types/uuid": "^9.0.4",
+    "@types/ws": "^8.5.5",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "eslint": "^8.50.0",
+    "tsx": "^3.14.0",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6",
+    "@vitest/coverage-v8": "^0.34.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,370 @@
+{
+  "ai_debug_config": {
+    "version": "2.0",
+    "last_updated": "2025-09-21",
+    
+    "llm_providers": {
+      "ollama_local": {
+        "enabled": true,
+        "priority": 1,
+        "base_url": "http://127.0.0.1:11434",
+        "timeout": 120,
+        "max_retries": 3,
+        "models": {
+          "llama3.2:latest": {
+            "tier": "balanced",
+            "context_window": 8192,
+            "specialization": "general_reasoning",
+            "performance_rating": 8.5,
+            "recommended_for": ["medium_complexity", "code_analysis", "general_debugging"]
+          },
+          "mixtral:latest": {
+            "tier": "heavyweight", 
+            "context_window": 32768,
+            "specialization": "complex_reasoning",
+            "performance_rating": 9.2,
+            "recommended_for": ["high_complexity", "architecture_decisions", "complex_debugging"]
+          },
+          "phi3:mini": {
+            "tier": "lightweight",
+            "context_window": 4096,
+            "specialization": "fast_responses",
+            "performance_rating": 7.8,
+            "recommended_for": ["simple_errors", "quick_analysis", "syntax_issues"]
+          },
+          "codellama:34b": {
+            "tier": "specialized",
+            "context_window": 16384,
+            "specialization": "code_specific",
+            "performance_rating": 9.0,
+            "recommended_for": ["code_errors", "programming_issues", "refactoring"]
+          },
+          "llama3.2:1b": {
+            "tier": "lightweight",
+            "context_window": 4096,
+            "specialization": "fast_responses",
+            "performance_rating": 7.0,
+            "recommended_for": ["simple_queries", "quick_fixes", "basic_analysis"]
+          }
+        },
+        "fallback_strategy": "cascade_to_smaller_model"
+      },
+      
+      "openai_api": {
+        "enabled": false,
+        "priority": 2,
+        "api_key_env": "OPENAI_API_KEY",
+        "base_url": "https://api.openai.com/v1",
+        "timeout": 60,
+        "cost_per_1k_tokens": 0.002,
+        "max_monthly_budget": 50.0,
+        "models": {
+          "gpt-4": {
+            "tier": "heavyweight",
+            "context_window": 8192,
+            "specialization": "complex_reasoning",
+            "performance_rating": 9.5,
+            "recommended_for": ["expert_analysis", "complex_problems", "architectural_decisions"]
+          },
+          "gpt-3.5-turbo": {
+            "tier": "balanced",
+            "context_window": 4096,
+            "specialization": "general_purpose",
+            "performance_rating": 8.8,
+            "recommended_for": ["general_debugging", "code_review", "explanations"]
+          }
+        },
+        "fallback_strategy": "use_cheaper_model"
+      },
+      
+      "anthropic_claude": {
+        "enabled": false,
+        "priority": 3,
+        "api_key_env": "ANTHROPIC_API_KEY",
+        "base_url": "https://api.anthropic.com",
+        "timeout": 60,
+        "cost_per_1k_tokens": 0.008,
+        "max_monthly_budget": 100.0,
+        "models": {
+          "claude-3-opus": {
+            "tier": "heavyweight",
+            "context_window": 100000,
+            "specialization": "reasoning_safety",
+            "performance_rating": 9.4,
+            "recommended_for": ["complex_analysis", "safety_critical", "detailed_explanations"]
+          },
+          "claude-3-sonnet": {
+            "tier": "balanced",
+            "context_window": 100000,
+            "specialization": "balanced_performance",
+            "performance_rating": 9.0,
+            "recommended_for": ["general_debugging", "code_analysis", "problem_solving"]
+          }
+        },
+        "fallback_strategy": "use_sonnet_first"
+      },
+      
+      "huggingface_inference": {
+        "enabled": false,
+        "priority": 4,
+        "api_key_env": "HF_API_KEY",
+        "base_url": "https://api-inference.huggingface.co/models",
+        "timeout": 90,
+        "free_tier_limits": {
+          "requests_per_hour": 100,
+          "requests_per_day": 1000
+        },
+        "models": {
+          "microsoft/DialoGPT-large": {
+            "tier": "balanced",
+            "context_window": 1024,
+            "specialization": "conversation",
+            "performance_rating": 7.5,
+            "recommended_for": ["interactive_debugging", "explanations"]
+          },
+          "bigcode/starcoder2-3b": {
+            "tier": "specialized",
+            "context_window": 8192,
+            "specialization": "code_generation",
+            "performance_rating": 8.2,
+            "recommended_for": ["code_fixes", "code_generation", "programming_help"]
+          }
+        },
+        "fallback_strategy": "round_robin"
+      }
+    },
+    
+    "routing_strategy": {
+      "default_approach": "privacy_first",
+      "routing_rules": {
+        "privacy_first": {
+          "description": "Prefer local models, fallback to external only if necessary",
+          "order": ["ollama_local", "huggingface_inference", "openai_api", "anthropic_claude"]
+        },
+        "performance_first": {
+          "description": "Route to best performing model regardless of location",
+          "order": ["anthropic_claude", "openai_api", "ollama_local", "huggingface_inference"]
+        },
+        "cost_optimized": {
+          "description": "Prefer free/cheaper options first",
+          "order": ["ollama_local", "huggingface_inference", "openai_api", "anthropic_claude"]
+        },
+        "local_only": {
+          "description": "Only use local Ollama models",
+          "order": ["ollama_local"]
+        }
+      }
+    },
+    
+    "model_selection_criteria": {
+      "complexity_mapping": {
+        "simple": {
+          "preferred_tiers": ["lightweight"],
+          "max_context_needed": 4096,
+          "examples": ["syntax_errors", "import_errors", "simple_bugs"]
+        },
+        "medium": {
+          "preferred_tiers": ["balanced"],
+          "max_context_needed": 8192,
+          "examples": ["logic_errors", "configuration_issues", "moderate_debugging"]
+        },
+        "complex": {
+          "preferred_tiers": ["heavyweight", "specialized"],
+          "max_context_needed": 16384,
+          "examples": ["architecture_problems", "performance_issues", "complex_debugging"]
+        },
+        "expert": {
+          "preferred_tiers": ["heavyweight"],
+          "max_context_needed": 32768,
+          "examples": ["system_design", "advanced_optimization", "research_problems"]
+        }
+      },
+      
+      "task_type_mapping": {
+        "error_analysis": {
+          "preferred_models": ["llama3.2:latest", "gpt-4", "claude-3-sonnet"],
+          "avoid_models": ["phi3:mini"]
+        },
+        "code_generation": {
+          "preferred_models": ["codellama:34b", "starcoder2-3b", "gpt-4"],
+          "avoid_models": []
+        },
+        "explanation": {
+          "preferred_models": ["claude-3-sonnet", "gpt-3.5-turbo", "llama3.2:latest"],
+          "avoid_models": []
+        },
+        "optimization": {
+          "preferred_models": ["mixtral:latest", "gpt-4", "claude-3-opus"],
+          "avoid_models": ["phi3:mini", "llama3.2:1b"]
+        },
+        "debugging": {
+          "preferred_models": ["codellama:34b", "mixtral:latest", "gpt-4"],
+          "avoid_models": []
+        }
+      }
+    },
+    
+    "performance_monitoring": {
+      "track_metrics": true,
+      "metrics_to_track": [
+        "response_time",
+        "success_rate", 
+        "accuracy_score",
+        "user_satisfaction",
+        "cost_per_request",
+        "context_utilization"
+      ],
+      "performance_thresholds": {
+        "max_response_time": 120,
+        "min_success_rate": 0.85,
+        "min_accuracy_score": 0.8
+      },
+      "auto_adjust_routing": true,
+      "learning_rate": 0.1
+    },
+    
+    "debugging_approaches": {
+      "tree_of_thoughts": {
+        "enabled": true,
+        "max_depth": 3,
+        "max_branches": 3,
+        "min_complexity_threshold": 8,
+        "preferred_models": ["mixtral:latest", "gpt-4", "claude-3-opus"],
+        "timeout": 300
+      },
+      
+      "react_debugging": {
+        "enabled": true,
+        "max_iterations": 10,
+        "min_complexity_threshold": 5,
+        "preferred_models": ["llama3.2:latest", "codellama:34b", "gpt-3.5-turbo"],
+        "timeout": 180,
+        "safe_actions_only": true
+      },
+      
+      "traditional_analysis": {
+        "enabled": true,
+        "max_complexity_threshold": 7,
+        "preferred_models": ["llama3.2:latest", "phi3:mini", "gpt-3.5-turbo"],
+        "timeout": 60
+      }
+    },
+    
+    "prompt_engineering": {
+      "temperature_settings": {
+        "debugging": 0.1,
+        "explanation": 0.3,
+        "creative_problem_solving": 0.7,
+        "code_generation": 0.2
+      },
+      
+      "system_prompts": {
+        "expert_debugger": "You are an elite software debugging specialist with 20+ years of experience across multiple programming languages and platforms. Your expertise includes system architecture, performance optimization, and complex problem-solving.",
+        
+        "code_analyst": "You are a senior code analyst specializing in code quality, best practices, and architectural decisions. You excel at identifying patterns, potential issues, and optimization opportunities.",
+        
+        "problem_solver": "You are a systematic problem solver who approaches complex issues methodically. You break down problems into manageable components and provide step-by-step solutions.",
+        
+        "safety_focused": "You are a safety-conscious debugging expert who prioritizes secure, reliable solutions. You always consider potential security implications and edge cases."
+      },
+      
+      "response_formats": {
+        "structured_json": true,
+        "include_confidence": true,
+        "include_alternatives": true,
+        "include_prevention": true,
+        "include_validation": true
+      }
+    },
+    
+    "integration_settings": {
+      "auto_capture_errors": true,
+      "real_time_analysis": true,
+      "batch_processing": false,
+      "save_all_interactions": true,
+      "privacy_mode": true,
+      "anonymize_sensitive_data": true,
+      
+      "file_monitoring": {
+        "enabled": true,
+        "watch_patterns": ["*.py", "*.js", "*.ts", "*.rs"],
+        "exclude_patterns": ["__pycache__", "node_modules", "venv", ".git"],
+        "trigger_on_save": true,
+        "trigger_on_error": true
+      },
+      
+      "ide_integration": {
+        "vscode_extension": true,
+        "hover_assistance": true,
+        "inline_suggestions": true,
+        "error_highlighting": true,
+        "auto_fix_suggestions": true
+      }
+    },
+    
+    "security_settings": {
+      "data_anonymization": {
+        "enabled": true,
+        "remove_secrets": true,
+        "anonymize_business_logic": true,
+        "mask_personal_data": true,
+        "preserve_error_context": true
+      },
+      
+      "sensitive_patterns": [
+        "password",
+        "secret",
+        "key",
+        "token",
+        "api_key",
+        "auth",
+        "credential",
+        "private",
+        "confidential"
+      ],
+      
+      "safe_execution": {
+        "sandbox_code_execution": true,
+        "whitelist_commands": [
+          "python --version",
+          "pip list",
+          "pip check",
+          "git status",
+          "ls -la",
+          "pwd",
+          "whoami"
+        ],
+        "blacklist_commands": [
+          "rm -rf",
+          "del /f",
+          "format",
+          "shutdown",
+          "reboot"
+        ]
+      }
+    },
+    
+    "learning_system": {
+      "continuous_learning": true,
+      "feedback_collection": true,
+      "solution_effectiveness_tracking": true,
+      "pattern_recognition": true,
+      "knowledge_base_updates": true,
+      
+      "learning_sources": [
+        "user_feedback",
+        "solution_outcomes", 
+        "error_patterns",
+        "code_analysis",
+        "community_knowledge"
+      ],
+      
+      "improvement_strategies": [
+        "prompt_optimization",
+        "model_fine_tuning",
+        "routing_optimization",
+        "context_enhancement"
+      ]
+    }
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "timestamp": "2025-09-21T23:59:12.087844",
+    "error_text": "Variable reference is not valid. ':' was not followed by a valid variable name character.",
+    "script_path": "ai-debug-master-deploy.ps1",
+    "line_number": 213,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-21T23:59:12.167608",
+    "error_text": "The 'from' keyword is not supported in this version of the language",
+    "script_path": "demo-ai-debug-features.ps1",
+    "line_number": 43,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-21T23:59:12.176514",
+    "error_text": "The variable 'TscResult' is assigned but never used",
+    "script_path": "demo-ai-debug-features.ps1",
+    "line_number": 158,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-22T00:02:42.644402",
+    "error_text": "Variable reference is not valid. ':' was not followed by a valid variable name character.",
+    "script_path": "ai-debug-master-deploy.ps1",
+    "line_number": 213,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-22T00:02:42.644402",
+    "error_text": "The 'from' keyword is not supported in this version of the language",
+    "script_path": "demo-ai-debug-features.ps1",
+    "line_number": 43,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-22T00:02:42.644402",
+    "error_text": "The variable 'TscResult' is assigned but never used",
+    "script_path": "demo-ai-debug-features.ps1",
+    "line_number": 158,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-22T00:09:13.770845",
+    "error_text": "Variable reference is not valid. ':' was not followed by a valid variable name character.",
+    "script_path": "ai-debug-master-deploy.ps1",
+    "line_number": 213,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-22T00:09:13.770845",
+    "error_text": "The 'from' keyword is not supported in this version of the language",
+    "script_path": "demo-ai-debug-features.ps1",
+    "line_number": 43,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  },
+  {
+    "timestamp": "2025-09-22T00:09:13.770845",
+    "error_text": "The variable 'TscResult' is assigned but never used",
+    "script_path": "demo-ai-debug-features.ps1",
+    "line_number": 158,
+    "auto_captured": true,
+    "protocol_compliance": "MANDATORY_DOCUMENTATION"
+  }
+]

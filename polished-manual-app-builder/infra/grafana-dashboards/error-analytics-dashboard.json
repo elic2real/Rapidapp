@@ -1,0 +1,286 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Error Prevention & Learning Analytics",
+    "tags": ["errors", "learning", "analytics"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Error Overview",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(errors_total[5m]))",
+            "legendFormat": "Error Rate"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 0.1},
+                {"color": "red", "value": 0.5}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Error Resolution Rate",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "sum(errors_resolved) / sum(errors_total) * 100",
+            "legendFormat": "Resolution Rate %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 50},
+                {"color": "green", "value": 80}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Auto-Solution Coverage",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "sum(errors_auto_solved) / sum(errors_total) * 100",
+            "legendFormat": "Auto-Solution Coverage %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "unit": "percent",
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 30},
+                {"color": "green", "value": 60}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "Learning Progress",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "increase(error_patterns_learned[24h])",
+            "legendFormat": "New Patterns Learned (24h)"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0}
+      },
+      {
+        "id": 5,
+        "title": "Error Trends by Service",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(rate(errors_total[5m])) by (service)",
+            "legendFormat": "{{service}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 10
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "Error Severity Distribution",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (severity) (errors_total)",
+            "legendFormat": "{{severity}}"
+          }
+        ],
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "pieType": "pie",
+          "tooltip": {
+            "mode": "single"
+          },
+          "legend": {
+            "displayMode": "visible",
+            "placement": "right"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 7,
+        "title": "Most Common Error Types",
+        "type": "barchart",
+        "targets": [
+          {
+            "expr": "topk(10, sum by (error_type) (increase(errors_total[24h])))",
+            "legendFormat": "{{error_type}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 8,
+        "title": "Error Learning Efficiency",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(error_solutions_generated[1h])",
+            "legendFormat": "Solutions Generated/Hour"
+          },
+          {
+            "expr": "rate(error_patterns_learned[1h])",
+            "legendFormat": "Patterns Learned/Hour"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "id": 9,
+        "title": "Recent Error Activity",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "{job=\"error-monitor\"} |= \"ERROR\"",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": false,
+          "showCommonLabels": false,
+          "wrapLogMessage": true,
+          "prettifyLogMessage": false,
+          "enableLogDetails": true,
+          "dedupStrategy": "none",
+          "sortOrder": "Descending"
+        },
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 24}
+      },
+      {
+        "id": 10,
+        "title": "Error Resolution Time",
+        "type": "histogram",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(error_resolution_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(error_resolution_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "50th percentile"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32}
+      },
+      {
+        "id": 11,
+        "title": "System Health Impact",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "avg(up) by (service)",
+            "legendFormat": "{{service}} uptime"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 1,
+            "unit": "percentunit",
+            "custom": {
+              "drawStyle": "line",
+              "fillOpacity": 20
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}
+      }
+    ],
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "refresh": "30s",
+    "schemaVersion": 30,
+    "version": 1,
+    "links": [
+      {
+        "title": "Error Prevention Guide",
+        "url": "/docs/ERROR_PREVENTION_GUIDE.md",
+        "type": "link"
+      },
+      {
+        "title": "Error Monitor Logs",
+        "url": "/logs/errors/",
+        "type": "link"
+      }
+    ]
+  },
+  "folderId": 0,
+  "folderTitle": "Error Analytics",
+  "overwrite": false
+}

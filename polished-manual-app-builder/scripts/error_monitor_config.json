@@ -1,0 +1,176 @@
+{
+  "services": {
+    "event-store": {
+      "url": "http://localhost:8080/health",
+      "container_name": "polished-manual-app-builder-event-store-1",
+      "critical": true,
+      "description": "High-performance event sourcing system",
+      "expected_response_time": 0.1
+    },
+    "orchestrator": {
+      "url": "http://localhost:8001/health",
+      "container_name": "polished-manual-app-builder-orchestrator-1", 
+      "critical": true,
+      "description": "AI model routing and semantic caching",
+      "expected_response_time": 0.2
+    },
+    "collab-engine": {
+      "url": "http://localhost:8003/health",
+      "container_name": "polished-manual-app-builder-collab-engine-1",
+      "critical": true,
+      "description": "Real-time collaborative editing engine",
+      "expected_response_time": 0.1
+    },
+    "postgres": {
+      "container_name": "polished-manual-app-builder-postgres-1",
+      "critical": true,
+      "description": "Primary database for events and cache",
+      "check_command": "pg_isready -U postgres"
+    },
+    "redis": {
+      "container_name": "polished-manual-app-builder-redis-1", 
+      "critical": false,
+      "description": "Session storage and pub/sub",
+      "check_command": "redis-cli ping"
+    },
+    "mongodb": {
+      "container_name": "polished-manual-app-builder-mongodb-1",
+      "critical": false,
+      "description": "Document storage for collaboration",
+      "check_command": "mongo --eval 'db.stats()'"
+    },
+    "jaeger": {
+      "url": "http://localhost:16686/api/services",
+      "container_name": "polished-manual-app-builder-jaeger-1",
+      "critical": false,
+      "description": "Distributed tracing system"
+    },
+    "prometheus": {
+      "url": "http://localhost:9090/-/healthy",
+      "container_name": "polished-manual-app-builder-prometheus-1", 
+      "critical": false,
+      "description": "Metrics collection and alerting"
+    },
+    "grafana": {
+      "url": "http://localhost:3000/api/health",
+      "container_name": "polished-manual-app-builder-grafana-1",
+      "critical": false,
+      "description": "Monitoring dashboards and visualization"
+    }
+  },
+  "monitoring": {
+    "check_interval": 30,
+    "response_timeout": 10,
+    "max_response_time": 5.0,
+    "memory_threshold": 80,
+    "cpu_threshold": 80,
+    "disk_threshold": 90,
+    "error_retention_days": 30,
+    "health_report_interval": 300
+  },
+  "alerting": {
+    "enabled": true,
+    "webhook_url": null,
+    "email_enabled": false,
+    "email_smtp": {
+      "host": null,
+      "port": 587,
+      "username": null,
+      "password": null,
+      "use_tls": true
+    },
+    "severity_filters": {
+      "webhook": ["high", "critical"],
+      "email": ["critical"],
+      "console": ["low", "medium", "high", "critical"]
+    },
+    "rate_limiting": {
+      "max_alerts_per_hour": 10,
+      "cooldown_minutes": 15
+    }
+  },
+  "error_patterns": {
+    "database_connection": {
+      "keywords": ["connection refused", "timeout", "authentication failed"],
+      "severity": "high",
+      "auto_resolution": [
+        "docker compose restart postgres redis mongodb",
+        "Wait 30 seconds for database initialization"
+      ]
+    },
+    "out_of_memory": {
+      "keywords": ["out of memory", "oom", "memory allocation failed"],
+      "severity": "critical", 
+      "auto_resolution": [
+        "docker system prune -f",
+        "docker compose restart",
+        "Check memory usage patterns"
+      ]
+    },
+    "port_conflict": {
+      "keywords": ["port already in use", "bind: address already in use"],
+      "severity": "high",
+      "auto_resolution": [
+        "docker compose down -v",
+        "Kill processes using conflicting ports",
+        "docker compose up -d"
+      ]
+    },
+    "disk_full": {
+      "keywords": ["no space left", "disk full", "write failed"],
+      "severity": "critical",
+      "auto_resolution": [
+        "docker system prune -a --volumes",
+        "Clean application logs",
+        "Remove unused files"
+      ]
+    }
+  },
+  "performance_thresholds": {
+    "event_store": {
+      "max_response_time": 0.1,
+      "max_memory_mb": 512,
+      "max_cpu_percent": 70
+    },
+    "orchestrator": {
+      "max_response_time": 0.5,
+      "max_memory_mb": 1024,
+      "max_cpu_percent": 60,
+      "cache_hit_rate_min": 0.5
+    },
+    "collab_engine": {
+      "max_response_time": 0.1,
+      "max_memory_mb": 256,
+      "max_cpu_percent": 50,
+      "websocket_connections_max": 1000
+    }
+  },
+  "auto_recovery": {
+    "enabled": true,
+    "max_attempts": 3,
+    "actions": {
+      "container_restart": {
+        "command": "docker compose restart {service}",
+        "conditions": ["service_down", "high_memory"],
+        "cooldown_minutes": 5
+      },
+      "system_cleanup": {
+        "command": "docker system prune -f",
+        "conditions": ["disk_full", "out_of_memory"],
+        "cooldown_minutes": 30
+      },
+      "cache_clear": {
+        "command": "docker compose exec redis redis-cli FLUSHALL",
+        "conditions": ["cache_corruption", "high_memory"],
+        "cooldown_minutes": 15
+      }
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "error_monitor.log",
+    "max_size_mb": 100,
+    "backup_count": 5,
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}

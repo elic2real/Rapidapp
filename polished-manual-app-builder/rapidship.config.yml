@@ -1,0 +1,152 @@
+# RapidShip Configuration
+# High-Quality AI-Driven Multi-Stack App Builder
+
+project:
+  name: "polished-manual-app-builder"
+  version: "1.0.0"
+  description: "Production-ready AI-assisted app builder with event sourcing and real-time collaboration"
+  
+# Feature toggles for the application
+features:
+  # AI & Orchestration
+  ai_orchestration: true
+  semantic_cache: true
+  local_models_first: true
+  ollama_integration: true
+  openai_fallback: false
+  anthropic_fallback: false
+  
+  # Collaboration & Real-time
+  yjs_collaboration: true
+  presence_awareness: true
+  offline_sync: true
+  conflict_resolution: true
+  
+  # Event Sourcing & Storage
+  event_sourcing: true
+  snapshot_compression: true
+  stream_partitioning: true
+  cold_archiving: true
+  
+  # Validation & Quality
+  validation_pipeline: true
+  syntax_checking: true
+  type_checking: true
+  security_scanning: true
+  performance_testing: true
+  
+  # Observability
+  opentelemetry: true
+  distributed_tracing: true
+  metrics_collection: true
+  structured_logging: true
+  health_endpoints: true
+  
+  # Security & Compliance
+  rbac_enforcement: true
+  audit_logging: true
+  secrets_management: true
+  sast_scanning: true
+  dependency_scanning: true
+  
+  # Multi-tenancy
+  shared_schema: true
+  separate_schemas: true
+  db_per_tenant: true
+  tenant_isolation: true
+  
+  # Development & Deployment
+  hot_reloading: true
+  docker_compose: true
+  kubernetes_manifests: false
+  ci_cd_pipeline: true
+  blue_green_deploy: false
+
+# Template configurations
+templates:
+  nextjs_postgres:
+    enabled: true
+    auth_provider: "nextauth"
+    orm: "prisma"
+    cache: "redis"
+    testing: ["vitest", "playwright"]
+    
+  fastapi_mongo:
+    enabled: true
+    auth_provider: "jwt"
+    orm: "motor"
+    cache: "redis"
+    testing: ["pytest", "httpx"]
+    
+  rust_axum_redis:
+    enabled: true
+    auth_provider: "tower-jwt"
+    orm: "sqlx"
+    cache: "redis"
+    testing: ["tokio-test", "reqwest"]
+
+# Service configurations
+services:
+  event_store:
+    port: 8080
+    language: "rust"
+    persistence: "disk"
+    snapshot_interval: 1000
+    
+  orchestrator:
+    port: 8001
+    language: "python"
+    framework: "fastapi"
+    cache_ttl: 3600
+    
+  collab_engine:
+    port: 8003
+    language: "typescript"
+    framework: "node"
+    persistence: "event_store"
+    
+  validation_pipeline:
+    port: 8004
+    language: "python"
+    framework: "fastapi"
+    parallel_gates: true
+    
+  feature_flags:
+    port: 8002
+    language: "golang"
+    persistence: "postgres"
+    cache: "redis"
+
+# Infrastructure
+infrastructure:
+  postgres:
+    version: "15"
+    port: 5432
+    
+  redis:
+    version: "7"
+    port: 6379
+    
+  mongodb:
+    version: "7"
+    port: 27017
+    
+  jaeger:
+    version: "1.50"
+    port: 16686
+    
+  prometheus:
+    version: "2.45"
+    port: 9090
+    
+  grafana:
+    version: "10"
+    port: 3000
+
+# Quality gates
+quality:
+  test_coverage_threshold: 80
+  type_coverage_threshold: 95
+  security_scan_required: true
+  performance_baseline_ms: 200
+  lint_score_threshold: 95
