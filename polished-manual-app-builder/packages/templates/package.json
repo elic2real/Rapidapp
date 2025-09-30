@@ -1,13 +1,26 @@
 {
-  "name": "templates",
-  "version": "0.0.0",
+  "name": "@rapidapp/templates",
+  "version": "1.0.0",
   "private": true,
-  "main": "src/cli.ts",
+  "main": "dist/cli.js",
+  "bin": {
+    "rapidapp": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/cli.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "commander": "^11.0.0",
-    "inquirer": "^9.2.0"
+    "inquirer": "^9.2.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@types/inquirer": "^9.0.0"
+    "@types/inquirer": "^9.0.0",
+    "@types/node": "^20.8.0",
+    "@types/node-fetch": "^3.0.3",
+    "typescript": "^5.2.2",
+    "ts-node": "^10.9.1"
   }
 }

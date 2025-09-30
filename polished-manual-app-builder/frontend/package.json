@@ -1,0 +1,30 @@
+{
+  "name": "rapidapp-frontend",
+  "version": "1.0.0",
+  "description": "Frontend service for Rapidapp AI-powered app generator",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'Static files, no build needed'",
+    "test": "echo 'No tests specified'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "node-fetch": "^3.3.2",
+    "archiver": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0"
+  },
+  "keywords": [
+    "ai",
+    "app-generator",
+    "frontend",
+    "rapidapp"
+  ],
+  "author": "Rapidapp AI Generator",
+  "license": "MIT"
+}
