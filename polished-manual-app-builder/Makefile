@@ -34,7 +34,7 @@ setup: ## Initial setup for development
 # Development
 dev: ## Start development servers
 	@echo "$(BLUE)Starting development environment...$(NC)"
-	docker compose up -d
+	sudo docker-compose up -d
 	@echo "$(YELLOW)Waiting for services to be healthy...$(NC)"
 	@sleep 10
 	pnpm run dev
@@ -85,18 +85,18 @@ security-scan: ## Run security scans
 build: ## Build all services
 	@echo "$(BLUE)Building all services...$(NC)"
 	pnpm run build
-	docker compose build
+	sudo docker-compose build
 
 ship: ## Build and deploy to production
 	@echo "$(BLUE)Shipping to production...$(NC)"
 	@$(MAKE) quality
 	@$(MAKE) build
-	docker compose up -d --build
+	sudo docker-compose up -d --build
 	@echo "$(GREEN)Deployment complete!$(NC)"
 
 preview: ## Preview deployment locally
 	@echo "$(BLUE)Starting preview environment...$(NC)"
-	docker compose -f docker-compose.yml up -d
+	sudo docker-compose -f docker-compose.yml up -d
 	@echo "$(GREEN)Preview environment started!$(NC)"
 	@echo "$(YELLOW)Access URLs:$(NC)"
 	@echo "  • Main App: http://localhost:3001"
@@ -107,26 +107,26 @@ preview: ## Preview deployment locally
 # Monitoring and Logs
 logs: ## View service logs
 	@echo "$(BLUE)Viewing service logs...$(NC)"
-	docker compose logs -f
+	sudo docker-compose logs -f
 
 logs-service: ## View logs for specific service (usage: make logs-service SERVICE=orchestrator)
 	@echo "$(BLUE)Viewing logs for $(SERVICE)...$(NC)"
-	docker compose logs -f $(SERVICE)
+	sudo docker-compose logs -f $(SERVICE)
 
 # Database Management
 db-up: ## Start database services only
 	@echo "$(BLUE)Starting database services...$(NC)"
-	docker compose up -d postgres redis mongodb
+	sudo docker-compose up -d postgres redis mongodb
 
 db-down: ## Stop database services
 	@echo "$(BLUE)Stopping database services...$(NC)"
-	docker compose stop postgres redis mongodb
+	sudo docker-compose stop postgres redis mongodb
 
 db-reset: ## Reset all databases (WARNING: Data loss!)
 	@echo "$(RED)WARNING: This will delete all data!$(NC)"
 	@echo "Press Ctrl+C to cancel, or wait 5 seconds to continue..."
 	@sleep 5
-	docker compose down -v
+	sudo docker-compose down -v
 	docker volume prune -f
 	@$(MAKE) db-up
 
@@ -160,7 +160,7 @@ doctor: ## Run system health checks
 clean: ## Clean build artifacts and containers
 	@echo "$(BLUE)Cleaning up...$(NC)"
 	pnpm run clean
-	docker compose down --remove-orphans
+	sudo docker-compose down --remove-orphans
 	docker system prune -f
 	@echo "$(GREEN)Cleanup complete!$(NC)"
 
@@ -168,7 +168,7 @@ clean-all: ## Clean everything including volumes and images
 	@echo "$(RED)WARNING: This will remove all containers, volumes, and images!$(NC)"
 	@echo "Press Ctrl+C to cancel, or wait 5 seconds to continue..."
 	@sleep 5
-	docker compose down -v --remove-orphans
+	sudo docker-compose down -v --remove-orphans
 	docker system prune -af --volumes
 	@echo "$(GREEN)Complete cleanup finished!$(NC)"
 

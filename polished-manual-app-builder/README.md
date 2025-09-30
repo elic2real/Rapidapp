@@ -1,156 +1,168 @@
-# Polished Manual: AI-Driven Multi-Stack App Builder
+# Rapidapp - Polished Manual App Builder
 
-🚀 **Production-ready AI-assisted app builder** with event sourcing, real-time collaboration, and multi-stack templates.
-
-## ✨ Features
-
-- **🧠 AI Orchestration**: Local-first with Ollama (Llama 3/Mistral), semantic caching
-- **⚡ Event Sourcing**: High-throughput event store with snapshots and stream partitioning
-- **🤝 Real-time Collaboration**: Yjs CRDT with presence and offline sync
-- **🛡️ Validation Pipeline**: Syntax → lint → type → security → performance gates
-- **🏗️ Multi-Stack Templates**: Next.js+Postgres, FastAPI+MongoDB, Rust Axum+Redis
-- **🔧 Feature Flags**: Progressive rollouts with expiration and SDKs
-- **📊 Observability**: OpenTelemetry, Jaeger, Prometheus, Grafana dashboards
-- **🔒 Security & Compliance**: RBAC, audit logs, SAST, secrets management
+A sophisticated development platform for building modern applications with real-time collaboration, event sourcing, and comprehensive observability.
 
 ## 🚀 Quick Start
 
+### One-Command Setup
+
 ```bash
-# Clone and start infrastructure
-git clone <repo-url>
+# Clone the repository
+git clone <repository-url>
 cd polished-manual-app-builder
-docker compose up -d
 
-# Start development services
-make dev
-
-# Scaffold a new app
-pnpm cli new my-saas --stack=nextjs-postgres --features=auth,ai --multi-tenant=shared-schema
-
-# Run quality gates
-make quality
+# Run the automated setup script
+./setup.sh
 ```
 
-## 📋 Available Commands
+The setup script will automatically:
+- Install all required dependencies (Docker, Node.js 20+, pnpm, Rust, Python)
+- Start infrastructure services (PostgreSQL, Redis, MongoDB, Grafana, Jaeger, Prometheus)
+- Install project dependencies
+- Create environment configuration files
+- Verify all services are running
 
-```bash
-make dev        # Start development servers
-make test       # Run all tests
-make lint       # Run linters
-make typecheck  # Type checking
-make quality    # Run all quality gates
-make ship       # Build and deploy
-make preview    # Preview deployment
-make logs       # View service logs
-make doctor     # System health check
-make clean      # Clean build artifacts
-```
+### Manual Setup (if needed)
+
+If you prefer to set up manually or troubleshoot issues:
+
+1. **Prerequisites:**
+   - Docker & Docker Compose
+   - Node.js 20+
+   - pnpm
+   - Rust 1.70+
+   - Python 3.11+
+
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
+
+3. **Start infrastructure:**
+   ```bash
+   make infra
+   ```
+
+4. **Start development services:**
+   ```bash
+   make dev
+   ```
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   AI Templates  │    │  Validation     │    │  Event Store    │
-│                 │────│  Pipeline       │────│                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │              ┌─────────────────┐              │
-         └──────────────│  Orchestrator   │──────────────┘
-                        │                 │
-                        └─────────────────┘
-                                 │
-                   ┌─────────────────┐    ┌─────────────────┐
-                   │  Collab Engine  │    │  Feature Flags  │
-                   │                 │    │                 │
-                   └─────────────────┘    └─────────────────┘
-```
+### Services
 
-## 🎯 Stack Templates
+- **Event Store** (Rust): High-performance event sourcing with CQRS
+- **Collaboration Engine** (Node.js): Real-time collaboration with Yjs CRDT
+- **Orchestrator** (Python): Workflow orchestration and business logic
 
-### Next.js + Postgres
-- **Auth**: NextAuth.js with OAuth2/OIDC
-- **Database**: Prisma ORM with migrations
-- **Cache**: Redis with edge caching
-- **Tests**: Vitest + Playwright
+### Infrastructure
 
-### FastAPI + MongoDB
-- **Auth**: JWT/OIDC with Pydantic validation
-- **Database**: Motor async driver with migrations
-- **Cache**: Redis with async client
-- **Tests**: pytest + httpx
+- **PostgreSQL**: Primary database for each service
+- **Redis**: Caching and pub/sub messaging
+- **MongoDB**: Document storage for orchestrator
+- **Grafana**: Observability dashboards
+- **Jaeger**: Distributed tracing
+- **Prometheus**: Metrics collection
 
-### Rust Axum + Redis
-- **Auth**: Tower middleware with JWT
-- **Database**: sqlx with compile-time queries
-- **Cache**: Redis with connection pooling
-- **Tests**: tokio-test + reqwest
+## 🔧 Development
 
-## 📊 Local Development URLs
-
-After running `docker compose up -d`:
-
-- **Jaeger UI**: http://localhost:16686
-- **SigNoz**: http://localhost:3301
-- **Prometheus**: http://localhost:9090
-- **Grafana**: http://localhost:3000 (admin/admin)
-- **Event Store**: http://localhost:8080
-- **Orchestrator**: http://localhost:8001
-- **Feature Flags**: http://localhost:8002
-
-## 🔒 Security Features
-
-- **Secrets Management**: Vault integration with local fallback
-- **RBAC**: Role-based access control middleware
-- **Audit Logs**: Structured logging for all write operations
-- **SAST**: Semgrep, Bandit, cargo-audit in CI
-- **Dependency Scanning**: npm audit, pip-audit, cargo-audit
-- **Input Validation**: Strong typing and sanitization
-
-## 📈 Trust Dashboard
-
-Monitor key metrics in `docs/TRUST_DASHBOARD.md`:
-
-- **Reliability**: CFR, MTTD, uptime SLA
-- **Performance**: P95 latency, cache hit rates
-- **Security**: Vulnerability count, SAST findings
-- **Quality**: Test coverage, type safety score
-
-## 🏢 Multi-Tenancy Support
-
-Choose your data isolation pattern:
-
-- **Shared Schema**: Single database, tenant_id column
-- **Separate Schemas**: Schema per tenant in same database  
-- **Database per Tenant**: Complete isolation
-
-## 📚 Documentation
-
-- [Architecture](docs/ARCHITECTURE.md) - System design and patterns
-- [Security Checklist](docs/SECURITY_CHECKLIST.md) - Compliance guide
-- [Trust Dashboard](docs/TRUST_DASHBOARD.md) - KPI monitoring
-- [ADRs](docs/ADRs/) - Architecture decision records
-- [Runbooks](docs/RUNBOOKS/) - Operational procedures
-
-## 🧪 Demo
-
-Run the complete demo:
+### Available Commands
 
 ```bash
-./scripts/demo.sh
+make help              # Show all available commands
+make dev               # Start all development services
+make dev-collab        # Start collaboration engine only
+make dev-event         # Start event store only
+make dev-orchestrator  # Start orchestrator only
+make test              # Run all tests
+make quality           # Run linting and type checks
+make clean             # Stop all services and clean up
 ```
 
-This will:
-1. Start all services
-2. Seed demo data
-3. Show AI orchestration with cache hits
-4. Demonstrate Yjs collaboration
-5. Run validation pipeline
-6. Display feature flag rollouts
+### Creating New Applications
 
-## 📜 License
+Use the CLI tool to scaffold new applications:
 
-MIT License - see [LICENSE](LICENSE) file.
+```bash
+pnpm cli new my-app
+```
 
----
+### Environment Configuration
 
-Built with ❤️ for Netflix/Google-level production teams.
+Each service has its own `.env` file with sensible defaults:
+- `services/event-store/.env`
+- `services/collab-engine/.env`
+- `services/orchestrator/.env`
+
+## 📊 Monitoring & Observability
+
+Access your monitoring stack:
+
+- **Grafana**: http://localhost:3000 (admin/admin)
+- **Jaeger**: http://localhost:16686
+- **Prometheus**: http://localhost:9090
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+make test
+
+# Run specific service tests
+cd services/collab-engine && pnpm test
+cd services/event-store && cargo test
+cd services/orchestrator && python -m pytest
+```
+
+## 📖 Documentation
+
+- [Error Monitoring Setup](docs/ERROR_MONITORING_README.md)
+- [Error Prevention Guide](docs/ERROR_PREVENTION_GUIDE.md)
+- [Error System Integration](docs/ERROR_SYSTEM_INTEGRATION.md)
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Docker permission denied**:
+   ```bash
+   sudo usermod -aG docker $USER
+   # Log out and log back in
+   ```
+
+2. **Port conflicts**:
+   ```bash
+   make clean  # Stop all services
+   docker ps   # Check for conflicting containers
+   ```
+
+3. **Node.js version issues**:
+   ```bash
+   node --version  # Should be 20+
+   # Install Node.js 20+ if needed
+   ```
+
+4. **Service health checks**:
+   ```bash
+   make status  # Check service health
+   docker-compose logs <service-name>  # Check logs
+   ```
+
+### Getting Help
+
+- Check service logs: `docker-compose logs <service-name>`
+- Verify service health: `make status`
+- Reset environment: `make clean && ./setup.sh`
+
+## � Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and quality checks: `make quality`
+5. Submit a pull request
+
+## � License
+
+See [LICENSE](LICENSE) file for details.

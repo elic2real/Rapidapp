@@ -51,7 +51,7 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:1.50
     environment:
-      COLLECTOR_OTLP_ENABLED: true
+      COLLECTOR_OTLP_ENABLED: "true"
     ports:
       - "16686:16686"
       - "14250:14250"
@@ -124,25 +124,26 @@ services:
       timeout: 10s
       retries: 3
 
-  feature-flags:
-    build:
-      context: ./services/feature-flags
-      dockerfile: Dockerfile
-    ports:
-      - "8002:8002"
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/polished_manual
-      REDIS_URL: redis://redis:6379
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  # Application Services - temporarily disabled missing services
+  # feature-flags:
+  #   build:
+  #     context: ./services/feature-flags
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8002:8002"
+  #   environment:
+  #     DATABASE_URL: postgres://postgres:postgres@postgres:5432/polished_manual
+  #     REDIS_URL: redis://redis:6379
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
 
   collab-engine:
     build:
@@ -165,26 +166,26 @@ services:
       timeout: 10s
       retries: 3
 
-  validation-pipeline:
-    build:
-      context: ./services/validation-pipeline
-      dockerfile: Dockerfile
-    ports:
-      - "8004:8004"
-    environment:
-      PYTHONPATH: /app
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/polished_manual
-      REDIS_URL: redis://redis:6379
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  # validation-pipeline:
+  #   build:
+  #     context: ./services/validation-pipeline
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8004:8004"
+  #   environment:
+  #     PYTHONPATH: /app
+  #     DATABASE_URL: postgres://postgres:postgres@postgres:5432/polished_manual
+  #     REDIS_URL: redis://redis:6379
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
 
 volumes:
   postgres_data:

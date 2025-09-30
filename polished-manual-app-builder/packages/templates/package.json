@@ -1,0 +1,13 @@
+{
+  "name": "templates",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/cli.ts",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "inquirer": "^9.2.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.0"
+  }
+}
