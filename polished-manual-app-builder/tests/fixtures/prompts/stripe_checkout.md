@@ -1,0 +1,1 @@
+Create a Stripe Checkout demo. Requirements: sandbox, no real keys, env injected by test.

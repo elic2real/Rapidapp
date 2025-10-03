@@ -1,0 +1,16 @@
+node_modules/
+**/node_modules/
+dist/
+build/
+.env
+.env.*
+coverage/
+.vscode/
+.DS_Store
+*.log
+*.sqlite
+*.pyc
+__pycache__/
+nohup.out
+test-download-*.zip
+generated-apps/

@@ -1,0 +1,1 @@
+Create a CRUD app with React and FastAPI. Requirements: JWT auth, pagination, tests.

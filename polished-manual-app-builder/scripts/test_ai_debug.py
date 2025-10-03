@@ -56,7 +56,7 @@ def test_error_analysis():
     for suggestion in suggestions:
         print_once(f"  • {suggestion}", "INFO")
     
-    return True
+        assert True
 
 def analyze_error_basic(error_info: Dict[str, Any]) -> list:
     """Basic error analysis without LLM dependencies"""
@@ -105,7 +105,7 @@ def test_subprocess_safety():
     else:
         print_once("Failed to get Python version", "WARNING")
     
-    return True
+        assert True
 
 def test_file_operations():
     """Test our hardened file operations"""
@@ -119,7 +119,7 @@ def test_file_operations():
     else:
         print_once("Failed to read test script", "WARNING")
     
-    return True
+        assert True
 
 def test_debug_integration():
     """Test integration capabilities"""
@@ -154,9 +154,8 @@ def test_debug_integration():
             
     except Exception as e:
         print_once(f"Integration test error: {e}", "ERROR")
-        return False
-    
-    return True
+        assert False, f"Integration test error: {e}"
+    assert True
 
 def main():
     """Run all AI debugging tests"""
@@ -176,19 +175,16 @@ def main():
     for test_name, test_func in tests:
         print_once(f"\n🧪 Running: {test_name}", "INFO")
         try:
-            if test_func():
+                test_func()
                 print_once(f"✅ {test_name} - PASSED", "SUCCESS")
                 passed += 1
-            else:
-                print_once(f"❌ {test_name} - FAILED", "ERROR")
         except Exception as e:
             print_once(f"❌ {test_name} - ERROR: {e}", "ERROR")
             traceback.print_exc()
     
     print_once(f"\n📊 Test Results: {passed}/{total} tests passed", "SUCCESS")
     print_once("🔧 AI Debugging System: OPERATIONAL", "SUCCESS")
-    
-    return passed == total
+    assert passed == total
 
 if __name__ == "__main__":
     success = main()

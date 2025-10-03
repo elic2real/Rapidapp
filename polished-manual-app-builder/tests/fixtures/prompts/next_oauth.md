@@ -1,0 +1,1 @@
+Create a Next.js app with Prisma and Google OAuth. Requirements: protected pages, Playwright e2e.

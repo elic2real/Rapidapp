@@ -8,14 +8,15 @@ import path from 'path';
 const API_URL = 'http://localhost:3030/api';
 
 async function simulateAppCreation() {
-  const description = 'A demo CRM app with authentication, dashboard, and notifications. Stack: nextjs-postgres';
+  const description =
+    'A demo CRM app with authentication, dashboard, and notifications. Stack: nextjs-postgres';
   const timestamp = new Date().toISOString();
   console.log('Test User: Sending app creation request...');
   try {
     const res = await fetch(`${API_URL}/generate-app`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ description, timestamp })
+      body: JSON.stringify({ description, timestamp }),
     });
     if (!res.ok) {
       throw new Error(`App creation failed: HTTP ${res.status}`);
@@ -27,7 +28,10 @@ async function simulateAppCreation() {
     console.log('Test User: App creation response:', data);
     return data.appId;
   } catch (error) {
-    console.error('Self-Debug: App creation error:', error instanceof Error ? error.message : error);
+    console.error(
+      'Self-Debug: App creation error:',
+      error instanceof Error ? error.message : error,
+    );
     return null;
   }
 }
@@ -46,7 +50,10 @@ async function checkStatus(appId) {
     console.log('Test User: Status response:', status);
     return status;
   } catch (error) {
-    console.error('Self-Debug: Status check error:', error instanceof Error ? error.message : error);
+    console.error(
+      'Self-Debug: Status check error:',
+      error instanceof Error ? error.message : error,
+    );
     return { status: 'error', error: error instanceof Error ? error.message : error };
   }
 }
@@ -88,7 +95,7 @@ export async function runTestUserEngine() {
       break;
     }
     if (status.status === 'completed') break;
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 2000));
   }
   if (status.status === 'completed') {
     diagnostics.actions.push('App generation completed.');
@@ -107,6 +114,9 @@ export async function runTestUserEngine() {
 }
 
 // If run directly, execute the engine (ESM compatible)
-if (import.meta.url === process.argv[1] || import.meta.url === `file://${process.cwd()}/test-user-engine.js`) {
+if (
+  import.meta.url === process.argv[1] ||
+  import.meta.url === `file://${process.cwd()}/test-user-engine.js`
+) {
   runTestUserEngine();
 }

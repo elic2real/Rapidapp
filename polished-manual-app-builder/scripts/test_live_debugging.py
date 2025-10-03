@@ -31,72 +31,61 @@ def test_error_capture_system():
     """Test the automatic error capture system"""
     print_once("🔍 Testing Automatic Error Capture System", "SUCCESS")
     
-    try:
-        # Initialize the error capture system
-        error_capturer = AutoErrorCapture()
-        print_once("✅ AutoErrorCapture initialized", "SUCCESS")
-        
-        # Create test error
-        error_info = create_intentional_error()
-        print_once(f"📝 Captured error: {error_info['type']}", "INFO")
-        print_once(f"📝 Error message: {error_info['message']}", "WARNING")
-        
-        return error_info
-        
-    except Exception as e:
-        print_once(f"❌ Error capture test failed: {e}", "ERROR")
-        return None
+    # Initialize the error capture system
+    error_capturer = AutoErrorCapture()
+    print_once("✅ AutoErrorCapture initialized", "SUCCESS")
+    # Create test error
+    error_info = create_intentional_error()
+    print_once(f"📝 Captured error: {error_info['type']}", "INFO")
+    print_once(f"📝 Error message: {error_info['message']}", "WARNING")
+    assert error_info is not None
+    return error_info
 
 def test_ai_error_context_creation():
     """Test creating AI-compatible error context"""
     print_once("\n🧠 Testing AI Error Context Creation", "SUCCESS")
     
-    try:
-        # Create comprehensive error context
-        context = ErrorContext(
-            error_type='NameError',
-            error_message='name "undefined_variable" is not defined',
-            stack_trace='Traceback (most recent call last):\n  File "test.py", line 20, in create_intentional_error\n    result = undefined_variable + 42\nNameError: name "undefined_variable" is not defined',
-            file_path='test_live_debugging.py',
-            line_number=20,
-            function_name='create_intentional_error',
-            code_context=[
-                'def create_intentional_error():',
-                '    """Create an intentional error for testing AI analysis"""',
-                '    try:',
-                '        # This will cause a NameError',
-                '        result = undefined_variable + 42  # <-- Error here',
-                '        return result',
-                '    except Exception as e:'
-            ],
-            environment_info={
-                'python_version': sys.version,
-                'platform': sys.platform,
-                'working_directory': str(sys.path[0])
-            },
-            related_files=['utils.py', 'ai_debug_system.py'],
-            dependency_info={
-                'modules': ['sys', 'traceback', 'utils'],
-                'packages': []
-            },
-            system_metrics={
-                'memory_usage': 'unknown',
-                'cpu_usage': 'unknown',
-                'disk_space': 'unknown'
-            },
-            timestamp='2025-09-22 01:15:00'
-        )
-        
-        print_once("✅ ErrorContext created successfully", "SUCCESS")
-        print_once(f"📝 Error type: {context.error_type}", "INFO")
-        print_once(f"📝 File: {context.file_path}:{context.line_number}", "INFO")
-        print_once(f"📝 Function: {context.function_name}", "INFO")
-        
-        return context
-        
-    except Exception as e:
-        print_once(f"❌ Error context creation failed: {e}", "ERROR")
-        return None
+    # Create comprehensive error context
+    context = ErrorContext(
+        error_type='NameError',
+        error_message='name "undefined_variable" is not defined',
+        stack_trace='Traceback (most recent call last):\n  File "test.py", line 20, in create_intentional_error\n    result = undefined_variable + 42\nNameError: name "undefined_variable" is not defined',
+        file_path='test_live_debugging.py',
+        line_number=20,
+        function_name='create_intentional_error',
+        code_context=[
+            'def create_intentional_error():',
+            '    """Create an intentional error for testing AI analysis"""',
+            '    try:',
+            '        # This will cause a NameError',
+            '        result = undefined_variable + 42  # <-- Error here',
+            '        return result',
+            '    except Exception as e:'
+        ],
+        environment_info={
+            'python_version': sys.version,
+            'platform': sys.platform,
+            'working_directory': str(sys.path[0])
+        },
+        related_files=['utils.py', 'ai_debug_system.py'],
+        dependency_info={
+            'modules': ['sys', 'traceback', 'utils'],
+            'packages': []
+        },
+        system_metrics={
+            'memory_usage': 'unknown',
+            'cpu_usage': 'unknown',
+            'disk_space': 'unknown'
+        },
+        timestamp='2025-09-22 01:15:00'
+    )
+    print_once("✅ ErrorContext created successfully", "SUCCESS")
+    print_once(f"📝 Error type: {context.error_type}", "INFO")
+    print_once(f"📝 File: {context.file_path}:{context.line_number}", "INFO")
+    print_once(f"📝 Function: {context.function_name}", "INFO")
+    assert context is not None
+    return context
+    # except block removed as all errors will raise
 
 def test_ai_solution_generation():
     """Test AI solution generation (simulated)"""
@@ -165,6 +154,7 @@ def test_ai_solution_generation():
     for tip in solution.prevention_tips:
         print_once(f"   • {tip}", "WARNING")
     
+    assert solution is not None
     return solution
 
 def test_full_debugging_workflow():
@@ -175,23 +165,19 @@ def test_full_debugging_workflow():
     # Step 1: Error Capture
     print_once("Step 1: Error Detection & Capture", "INFO")
     error_info = test_error_capture_system()
-    if not error_info:
-        print_once("❌ Workflow failed at error capture stage", "ERROR")
-        return False
+    # Accept a non-None error_info (dict) as success
+    assert error_info is not None, "Workflow failed at error capture stage"
+    assert isinstance(error_info, dict), "Error info should be a dictionary"
     
     # Step 2: Context Creation
     print_once("\nStep 2: Error Context Analysis", "INFO")
     context = test_ai_error_context_creation()
-    if not context:
-        print_once("❌ Workflow failed at context creation stage", "ERROR")
-        return False
+    assert context is not None, "Workflow failed at context creation stage"
     
     # Step 3: AI Solution Generation
     print_once("\nStep 3: AI-Powered Solution Generation", "INFO")
     solution = test_ai_solution_generation()
-    if not solution:
-        print_once("❌ Workflow failed at solution generation stage", "ERROR")
-        return False
+    assert solution is not None, "Workflow failed at solution generation stage"
     
     # Step 4: Solution Application (simulated)
     print_once("\nStep 4: Solution Application & Validation", "INFO")
@@ -200,7 +186,7 @@ def test_full_debugging_workflow():
     print_once("✅ Error prevention measures would be implemented", "SUCCESS")
     
     print_once("\n🎉 COMPLETE AI DEBUGGING WORKFLOW SUCCESSFUL", "SUCCESS")
-    return True
+    assert True
 
 def main():
     """Run live AI debugging tests"""

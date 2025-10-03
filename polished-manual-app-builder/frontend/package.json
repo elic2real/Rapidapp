@@ -8,16 +8,21 @@
     "dev": "node server.js",
     "start": "node server.js",
     "build": "echo 'Static files, no build needed'",
-    "test": "echo 'No tests specified'"
+    "test": "vitest run --coverage",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "archiver": "^6.0.1",
     "cors": "^2.8.5",
-    "node-fetch": "^3.3.2",
-    "archiver": "^6.0.1"
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@types/node": "^20.8.0"
+    "@types/node": "^20.8.0",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5"
   },
   "keywords": [
     "ai",

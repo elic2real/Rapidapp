@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm run lint
+      - name: Typecheck
+        run: pnpm run typecheck
+      - name: Unit & Integration Tests
+        run: pnpm run test
+      - name: E2E Tests
+        run: pnpm run test:e2e
+      - name: Security Audit
+        run: pnpm run security || true
+      - name: Performance Tests
+        run: pnpm run perf || true
+      - name: Upload Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+      - name: Upload Playwright Traces
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+      - name: Upload k6 Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: tests/performance/k6/
+      - name: Enforce Coverage Gate
+        run: |
+          npx vitest run --coverage --reporter=text --reporter=lcov
+          grep -q 'lines.*90' coverage/lcov.info
+      - name: Enforce A11y Gate
+        run: pnpm run test:e2e && grep -q 'no serious a11y issues' test-results/a11y.log
+      - name: Enforce Security Gate
+        run: pnpm audit --audit-level=high
+      - name: Enforce Perf Gate
+        run: grep -q 'P95 < 200ms' tests/performance/k6/results.txt

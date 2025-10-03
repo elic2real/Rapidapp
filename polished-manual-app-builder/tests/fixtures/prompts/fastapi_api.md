@@ -1,0 +1,1 @@
+Create a REST API with FastAPI. Requirements: OpenAPI spec, zod validation, supertest.

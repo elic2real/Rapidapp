@@ -1,0 +1,1 @@
+Create a React Native starter app. Requirements: compiles, unit tests pass.
